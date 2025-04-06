@@ -40,7 +40,7 @@ dataTensor = get_data()
 '''
 # :earth_americas: Fetch internship excercise
 
-**Problem Statement:** Given an array of 365 integers, each corresponding to number of receipts scanned each **day** in the year 2021, train an ML model to predict the number of receipts scanned for each **month** in 2022
+**Problem Statement:** Given an array of 365 integers, each corresponding to the number of receipts scanned each **day** in the year 2021, train an ML model to predict the number of receipts scanned for each **month** in 2022
 '''
 
 # Add some spacing
@@ -98,7 +98,7 @@ st.markdown(r'**Model parameter:** $ \mathbf{w} = [b, m] $')
 st.latex(r'''
 y \sim \mathcal{N}(f(\mathbf{w}, x), \sigma^2)
 ''')
-st.markdown(r'It only models relationship between $ y $ and $ x $, but does not model the probability distribution of $ x $.')
+st.markdown(r'It only models the relationship between $ y $ and $ x $, but does not model the probability distribution of $ x $.')
 
 
 '''### LEAST SQUARES REGRESSION
@@ -107,7 +107,7 @@ This kind of data is usually best modelled by Least Squares Regression. I have n
 '''
 
 '''## Testing the Hypothesis
-Now I will see how well least squares model works on the given data. During this, we can also look at what it predictions are made based on the training data and how well it fits the testing. You can adjust the sliders to play around with the number of training and testing data points to use in the prediction. Default is the first 80% of data points for training, the rest for testing. '''
+Now, I will see how well least squares model works on the given data. During this, we can also look at what predictions are made based on the training data and how well it fits the testing. You can adjust the sliders to play around with the number of training and testing data points to use in the prediction. Default is the first 80% of data points for training, the rest are for testing. '''
 
 # Data pre-processing
 data = dataTensor.flatten().unsqueeze(1)
@@ -188,7 +188,7 @@ ax.grid(True)
 # Show in Streamlit
 st.pyplot(fig)
 
-'''Seeing that the Least Squares Regression indeed models the data well, I perform further testing. This is to rule out the possibility that the first section of the data is not corelated to the second half and vice versa. To do this, I will split the data into blocks of the following size (view slider, default is 30 since we have approximately 30 days in each month) and assign each alternating block to training and the rest to testing data. This way approximately divide the dataset into halves of trainning and testing which will be used to validate predictions.
+'''Seeing that the Least Squares Regression indeed models the data well, I perform further testing. This is to rule out the possibility that the first section of the data is not corelated to the second half and vice versa. To do this, I will split the data into blocks of the following size (view slider, default is 30 since we have approximately 30 days in each month) and assign each alternating block to training and the rest to testing data. This method approximately divides the dataset into halves of training and testing which will be used to validate predictions.
 '''
 
 
@@ -319,6 +319,7 @@ end_indices = start_indices + window
 monthly_predicted_sums = torch.stack([
     future_predictions[start:end].sum() for start, end in zip(start_indices, end_indices)
 ])
+
 '''
 We can clearly see that the prediction model follows the groups of test data really well. Hence we can continue with this model and predict the number of receipts scanned for each month in 2022'''
 
@@ -394,21 +395,21 @@ At first glance, there seems to be **overfitting** in the model. The **lack of d
 
 ---
 ### Remarks
-I do not model the noise (i.e. variance parameters of the gaussian) because I am only supposed to predict based on month. Summing over a sizable "chunk" of the data set (approximately 30 in this case) cancels out the noise and predicts the data fairly accurately. 
+I do not model the noise (i.e. variance parameters of the gaussian) here because I am only supposed to predict based on each month. Moreover, summing over a sizable "chunk" of the data set (approximately 30 in this case) cancels out the noise and predicts the data fairly accurately. 
 
-Some things like plotting and splitting into chunks might have had better performance with numpy or similar libraries, however, the instructions said that the excercise was being judged on skilles in PyTorch or TensorFlow, hence, i chose to use PyTorch. 
+Some things like plotting and splitting into chunks might have had better performance with numpy or similar libraries, however, the instructions said that the excercise was being judged on skills in PyTorch or TensorFlow, hence, I chose to use PyTorch. 
 
 ---
 
 ### Additional Factors That May Contribute to Cost Prediction
 
-Here are a few important considerations that i would include given more resources/data:
+Here are a few important considerations that I would include given more resources/data:
 
 - **Time of the year**  
-  Individuals typically tend to shop more during the end of the year/winter season due to festivals like Halloween, Thanksgiving, Christmas, etc. However, this clearly doesnt seem to be the case. The growth of the company is steadily increasing over the months which brings me to the next point...
+  Individuals typically tend to shop more during the end of the year/winter season due to events like Halloween, Thanksgiving, Christmas, etc concentrated around that time. However, this clearly doesn't seem to be the case. The growth of the company is steadily increasing over the months which brings me to the next point...
 
 - **Growth of the company over the months**  
-  As the company grows, it reaches more customers, leading to **more downloads and more receipts scanned per customer**.    
+  As the company grows, it reaches more customers, leading to **more downloads and more receipts scanned per customer**.
 
 - **Growth of the company over the year**  
   Similar logic applies here.  
