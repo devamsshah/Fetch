@@ -1,6 +1,6 @@
-# :earth_americas: GDP dashboard template
+# :earth_americas: Fetch Data Prediction using ML
 
-A simple Streamlit app showing the GDP of different countries in the world.
+Problem Statement: Given an array of 365 integers, each corresponding to number of receipts scanned each day in the year 2021, train an ML model to predict the number of receipts scanned for each month in 2022
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://gdp-dashboard-template.streamlit.app/)
 
