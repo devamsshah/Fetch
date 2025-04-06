@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import math
 import matplotlib.pyplot as plt
 from pathlib import Path
 import torch
@@ -108,7 +107,7 @@ This kind of data is usually best modelled by Least Squares Regression. I have n
 '''
 
 '''## Testing the Hypothesis
-Now I will see how well least squares model works on the given data, and also look at what it predicts'''
+Now I will see how well least squares model works on the given data. During this, we can also look at what it predictions are made based on the training data and how well it fits the testing. You can adjust the sliders to play around with the number of training and testing data points to use in the prediction. Default is the first 80% of data points for training, the rest for testing. '''
 
 # Data pre-processing
 data = dataTensor.flatten().unsqueeze(1)
@@ -189,7 +188,7 @@ ax.grid(True)
 # Show in Streamlit
 st.pyplot(fig)
 
-'''Seeing that the Least Squares Regression indeed models the data well, I perform further testing. This is to rule out the possibility that the first section of the data is not corelated to the second half and vice versa. To do this, i will split the data into blocks of the following size (view slider) and assign each alternating block to training and testing data. This way approximately half the dataset for trainning the other half to validate predictions.
+'''Seeing that the Least Squares Regression indeed models the data well, I perform further testing. This is to rule out the possibility that the first section of the data is not corelated to the second half and vice versa. To do this, I will split the data into blocks of the following size (view slider, default is 30 since we have approximately 30 days in each month) and assign each alternating block to training and the rest to testing data. This way approximately divide the dataset into halves of trainning and testing which will be used to validate predictions.
 '''
 
 
@@ -320,9 +319,12 @@ end_indices = start_indices + window
 monthly_predicted_sums = torch.stack([
     future_predictions[start:end].sum() for start, end in zip(start_indices, end_indices)
 ])
+'''
+We can clearly see that the prediction model follows the groups of test data really well. Hence we can continue with this model and predict the number of receipts scanned for each month in 2022'''
 
 # Print predicted monthly sums
 st.subheader("Predicted Monthly Sums for 2022")
+
 # for i, s in enumerate(monthly_predicted_sums):
 #     st.write(f"Month {i + 1}: Predicted sum = {s:.2f}")
 
@@ -350,8 +352,8 @@ st.pyplot(fig1)
 
 # --- Plot 2: Actual vs Predicted Monthly Sums ---
 fig2, ax2 = plt.subplots(figsize=(10, 5))
-ax2.plot(monthly_actual_sums.cpu(), 'bo-', label='Original Data')
-ax2.plot(monthly_predicted_sums.cpu(), 'go-', label='Least Squares')
+ax2.plot(monthly_actual_sums.cpu(), 'bo-', label='Original Data sum')
+ax2.plot(monthly_predicted_sums.cpu(), 'go-', label='Least Squares sum')
 ax2.set_xticks(range(0, 12))
 ax2.set_xticklabels([
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
