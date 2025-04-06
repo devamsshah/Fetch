@@ -1,4 +1,5 @@
-streamlit
-pandas
-torch
-pathlib
+streamlit==1.32.0
+pandas==2.2.1
+matplotlib==3.8.3
+torch==2.2.1
+
