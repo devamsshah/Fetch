@@ -17,3 +17,9 @@ Problem Statement: Given an array of 365 integers, each corresponding to number 
    ```
    $ streamlit run streamlit_app.py
    ```
+3. If there are errors regarding use_container_width, then running this before step 2 will help:
+
+   ```
+   $ pip install --upgrade streamlit
+   ```
+
