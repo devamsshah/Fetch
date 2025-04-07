@@ -121,7 +121,7 @@ start_day, end_day = st.slider(
     value=(1, int(0.8*365))
 )
 
-# Convert to indices (Python is 0-based)
+# Convert to indices 
 start_idx = start_day - 1
 end_idx = end_day
 
@@ -145,16 +145,12 @@ predicted_values = extended_days * m + b
 
 # Plotting
 fig, ax = plt.subplots(figsize=(10, 6))
-
-# Plot training data (blue)
 ax.plot(
     torch.arange(start_day, end_day + 1).cpu().numpy(),
     data[start_idx:end_idx].cpu().numpy(),
     label="Training Data",
     color='blue'
 )
-
-# Plot rest of data (green)
 if start_idx > 0:
     ax.plot(
         torch.arange(1, start_day).cpu().numpy(),
@@ -168,8 +164,6 @@ if end_idx < 365:
         data[end_idx:].cpu().numpy(),
         color='green'
     )
-
-# Plot prediction line
 ax.plot(
     extended_days.cpu().numpy(),
     predicted_values.cpu().numpy(),
@@ -184,8 +178,6 @@ ax.set_ylabel("Value")
 ax.set_title("Interactive Least Squares Model")
 ax.legend()
 ax.grid(True)
-
-# Show in Streamlit
 st.pyplot(fig)
 
 '''Seeing that the Least Squares Regression indeed models the data well, I perform further testing. This is to rule out the possibility that the first section of the data is not corelated to the second half and vice versa. To do this, I will split the data into blocks of the following size (view slider, default is 30 since we have approximately 30 days in each month) and assign each alternating block to training and the rest to testing data. This method approximately divides the dataset into halves of training and testing which will be used to validate predictions.
@@ -286,7 +278,7 @@ actual_sums_tensor = torch.stack(actual_sums)
 predicted_sums_tensor = torch.stack(predicted_sums)
 differences = actual_sums_tensor - predicted_sums_tensor
 
-# Optional: display numerical results
+# --- Plot 1:
 st.subheader("30-Day Test Block Predictions:")
 for i, (act, pred, diff) in enumerate(zip(actual_sums_tensor, predicted_sums_tensor, differences)):
     st.write(f"Segment {i+1}: Actual = {act:.2f}, Predicted = {pred:.2f}, Diff = {diff:.2f}")
@@ -311,7 +303,7 @@ st.pyplot(fig2)
 
 # Predict values for next year (days 366 to 730)
 future_days = torch.arange(366, 731, dtype=torch.float32, device=train_array.device).unsqueeze(1)
-future_predictions = m * future_days + b  # m and b are Python floats
+future_predictions = m * future_days + b 
 
 # Compute monthly predicted sums
 start_indices = torch.cumsum(torch.cat((torch.tensor([0], device=window.device), window[:-1])), dim=0)
@@ -325,9 +317,6 @@ We can clearly see that the prediction model follows the groups of test data rea
 
 # Print predicted monthly sums
 st.subheader("Predicted Monthly Sums for 2022")
-
-# for i, s in enumerate(monthly_predicted_sums):
-#     st.write(f"Month {i + 1}: Predicted sum = {s:.2f}")
 
 # --- Plot 1: Bar Plot for Monthly Predictions ---
 fig1, ax1 = plt.subplots(figsize=(14, 8))
